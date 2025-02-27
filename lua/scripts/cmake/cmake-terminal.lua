@@ -1,8 +1,6 @@
 local Terminal = {}
 local function ApplySyntax(win)
   vim.fn.matchadd("@constructor", "[0-9]",100, -1, {window = win})
-  vim.fn.matchadd("lualine_a_replace", "FAILED:", 100, -1, {window = win})
-  vim.fn.matchadd("lualine_a_replace", "[ERROR]", 100, -1, {window = win})
   vim.fn.matchadd("@comment.error", "\\verror:.*", 100, -1, {window = win})
   vim.fn.matchadd("@comment.error", "error\\w", 100, -1, {window = win})
   vim.fn.matchadd("@comment.warning", "\\vwarning:.*", 100, -1, {window = win})
@@ -15,6 +13,7 @@ local function ApplySyntax(win)
   vim.fn.matchadd("String", "'[^']*'",100, -1, {window = win})
   vim.fn.matchadd("Directory", "\\zs[A-Z]:\\(.*\\)(\\d\\+,\\d\\+):",100, -1, {window = win})
   vim.fn.matchadd("@comment", "\\zs|.*$",100, -1, {window = win})
+  vim.fn.matchadd("none", "\\zs\\^\\(.*\\)",100, -1, {window = win})
   vim.fn.matchadd("conceal", "\\zsIn file included from \\(.*\\)",100, -1, {window = win})
 end
 
@@ -39,11 +38,7 @@ Terminal.Call =  function(cmd, syntax)
       cleaned_data = cleaned_data:gsub("\r", "")
       local lines = vim.split(cleaned_data, '\n')
       local line_count = vim.api.nvim_buf_line_count(buf)
-      if line_count == 1 then
-        vim.api.nvim_buf_set_lines(buf, 0, 0, false, lines)
-      else
-        vim.api.nvim_buf_set_lines(buf, line_count, line_count, false, lines)
-      end
+      vim.api.nvim_buf_set_lines(buf, line_count, line_count, false, lines)
       vim.api.nvim_win_set_cursor(win, {line_count + #lines, 0})
     end
   end
