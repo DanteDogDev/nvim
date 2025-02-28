@@ -45,7 +45,6 @@ Terminal.Call =  function(cmd, syntax)
   local function on_exit(_, exit_code)
     Terminal.job = nil
     vim.api.nvim_del_user_command("CMakeStop")
-    -- Handle command completion
     vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
     local line_count = vim.api.nvim_buf_line_count(buf) - 1
     vim.api.nvim_buf_set_lines(buf, line_count, line_count, false, {"Process Finnished with Exit Code: " .. exit_code})

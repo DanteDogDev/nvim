@@ -35,11 +35,12 @@ git clone https://github.com/DanteDogDev/nvim.git $env:LOCALAPPDATA\nvim
 - lazygit
 - git
 - mingw
-- llvm
 - ripgrep
 - fd
 - fzf
-- cargo
+- rust
+#### C/C++
+- llvm
 - cmake
 - ninja
 
@@ -55,8 +56,9 @@ choco install lazygit
 choco install ripgrep
 choco install fd
 choco install fzf
-choco install llvm
 choco install rust
+# C/C++
+choco install llvm
 choco install cmake
 choco install ninja
 ```

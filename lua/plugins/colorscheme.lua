@@ -1,6 +1,6 @@
 return {
   -- { "rose-pine/neovim", name = "rose-pine",},
-  -- { "folke/tokyonight.nvim", lazy = false, },
+  { "folke/tokyonight.nvim", },
   {
     "LazyVim/LazyVim",
     opts = {
