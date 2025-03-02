@@ -58,7 +58,7 @@ Terminal.Call =  function(cmd, syntax)
     if Terminal.job then
       vim.fn.jobstop(Terminal.job)
       Terminal.job = nil
-      local line_count = vim.api.nvim_buf_line_count(buf) - 1
+      local line_count = vim.api.nvim_buf_line_count(buf)
       vim.api.nvim_buf_set_lines(buf, line_count, line_count, false, {"Process Stopped by User."})
       vim.api.nvim_win_set_cursor(win, {line_count + 1, 0})
       vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })

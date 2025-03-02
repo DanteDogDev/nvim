@@ -8,4 +8,3 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 vim.o.foldmethod = "marker"
 vim.o.foldmarker = "#pragma region,#pragma endregion"
-

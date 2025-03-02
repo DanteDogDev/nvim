@@ -12,13 +12,14 @@ return {
     { "<M-H>", function() require("dap").up() end, desc = "Move Up The Stack" },
     { "<M-L>", function() require("dap").down() end, desc = "Move Down The Stack" },
 
+    -- { "<leader>dc", false},
     { "<leader>do", false},
     { "<leader>di", false},
     { "<leader>dO", false},
-    { "<leader>dc", false},
     { "<leader>dP", false},
     { "<leader>dj", false},
     { "<leader>dk", false},
+    { "<leader>dt", false},
 
     -- { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
     -- { "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
