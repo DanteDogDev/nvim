@@ -11,6 +11,7 @@ M.setup = function()
   end, {})
 
   vim.api.nvim_create_user_command("CMakeBuild", function()
+    vim.cmd("wa")
     CMake.Build()
   end, {})
 
