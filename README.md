@@ -43,6 +43,8 @@ git clone https://github.com/DanteDogDev/nvim.git $env:LOCALAPPDATA\nvim
 - llvm
 - cmake
 - ninja
+#### Json
+- nodejs
 
 > Experimental Installation
 ```bash
@@ -61,6 +63,9 @@ choco install rust
 choco install llvm
 choco install cmake
 choco install ninja
+# Json
+winget install Schniz.fnm
+fnm install 22 # might have to add this to enviroment variables
 ```
 > snacks.image not working yet ignore
 ```bash
