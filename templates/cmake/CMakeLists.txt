@@ -13,6 +13,6 @@ file(GLOB_RECURSE SRC CONFIGURE_DEPENDS
 # target_link_directories(${PROJECT} PUBLIC lib) # AE only
 # target_link_libraries(${PROJECT} PUBLIC aecore) # AE only
 
-add_executable(${PROJECT} src/main.cpp
+add_executable(${PROJECT}
     ${SRC}
 )
