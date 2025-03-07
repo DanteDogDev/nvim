@@ -9,8 +9,8 @@ return {
     { "<F6>", function() require("dap").restart() end, desc = "Restart" },
     { "<F7>", function() require("dap").pause() end, desc = "Pause" },
     { "<F8>", function() require("dap").terminate() end, desc = "Terminate" },
-    { "<M-H>", function() require("dap").up() end, desc = "Move Up The Stack" },
-    { "<M-L>", function() require("dap").down() end, desc = "Move Down The Stack" },
+    { "<F9>", function() require("dap").up() end, desc = "Move Up The Stack" },
+    { "<F10>", function() require("dap").down() end, desc = "Move Down The Stack" },
 
     -- { "<leader>dc", false},
     { "<leader>do", false},
