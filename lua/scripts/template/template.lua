@@ -1,21 +1,22 @@
-local parser = {
+local M = {
+  init = false,
   expressions = {},
   replacer = {}
 }
 
-parser.register = function(expr, replacer)
-  parser.expressions[expr] = replacer
+M.register = function(expr, replacer)
+  M.expressions[expr] = replacer
 end
 
-parser.parse = function(input)
-  for expr, replacer in pairs(parser.expressions) do
+M.parse = function(input)
+  for expr, replacer in pairs(M.expressions) do
     local replace = replacer()
     input = input:gsub(expr, replace)
   end
   return input
 end
 
-parser.insert = function(opts)
+M.insert = function(opts)
   local dir = vim.fn.stdpath("config") .. "/templates"
   local files = vim.fn.globpath(dir, "**/*", true, true)
   local file_dir
@@ -44,7 +45,7 @@ parser.insert = function(opts)
     print("Error: Template file '" .. opts .. "' is empty.")
     return
   end
-  local parsed_contents = parser.parse(contents)
+  local parsed_contents = M.parse(contents)
   if parsed_contents then
     local current_buf = vim.api.nvim_get_current_buf()
     vim.api.nvim_buf_set_lines(current_buf, 0, 0, false, vim.split(parsed_contents, "\n"))
@@ -54,12 +55,15 @@ parser.insert = function(opts)
   end
 end
 
-parser.setup = function()
-  parser.register('${FILENAME}', function() return vim.fn.expand('%:t:r') end)
-  parser.register('${DATE}', function() return os.date("%d/%m/%y") end)
-  parser.register('${AUTHOR}', function() return vim.fn.system("git config user.name"):gsub("\n", "") end)
-  parser.register('${EMAIL}', function() return vim.fn.system("git config user.email"):gsub("\n", "") end)
-  parser.register('${PROJECT}', function() return vim.fn.system('powershell -Command "Split-Path -Leaf (Get-Location)"'):gsub("\n", "") end)
+M.setup = function()
+
+  if M.init then return end
+  M.init = true
+  M.register('${FILENAME}', function() return vim.fn.expand('%:t:r') end)
+  M.register('${DATE}', function() return os.date("%d/%m/%y") end)
+  M.register('${AUTHOR}', function() return vim.fn.system("git config user.name"):gsub("\n", "") end)
+  M.register('${EMAIL}', function() return vim.fn.system("git config user.email"):gsub("\n", "") end)
+  M.register('${PROJECT}', function() return vim.fn.system('powershell -Command "Split-Path -Leaf (Get-Location)"'):gsub("\n", "") end)
 
   local id = vim.api.nvim_create_augroup("Templates", {clear = false})
   vim.api.nvim_create_autocmd("BufReadPost", {
@@ -69,13 +73,13 @@ parser.setup = function()
       local file_size = vim.fn.getfsize(file_path)
       local extension = file_path:match("%.([^.]+)$")
       if file_size == 0 then
-        parser.insert(extension .. ".tpl")
+        M.insert(extension .. ".tpl")
       end
     end,
   })
 
   vim.api.nvim_create_user_command("Template", function(opts)
-    parser.insert(opts.args)
+    M.insert(opts.args)
   end, {
       nargs = 1,  -- Expect one argument
       ---@diagnostic disable-next-line: unused-local
@@ -103,4 +107,4 @@ parser.setup = function()
     })
 
 end
-return parser
+return M

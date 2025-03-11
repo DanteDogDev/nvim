@@ -1,5 +1,7 @@
-local M = {}
+local M = {init = false}
 M.setup = function()
+  if M.init then return end
+  M.init = true
   local CMake = require("scripts.cmake.cmake")
 
   vim.api.nvim_create_user_command("CMakeClean", function()
