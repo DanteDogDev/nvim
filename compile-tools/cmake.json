@@ -1,0 +1,19 @@
+[
+  {
+    "name" : "ninja",
+    "generator" : "Ninja"
+  },
+  {
+    "name" : "msvs",
+    "generator" : "Visual Studio 17 2022"
+  },
+  {
+    "name" : "ninja-msvs",
+    "generator" : "Ninja",
+    "compilers" : {
+      "C" : "clang-cl.exe",
+      "CXX" : "clang-cl.exe"
+    },
+    "envSetupScript" : "VCVARS64"
+  }
+]
