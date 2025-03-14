@@ -4,6 +4,10 @@
     "generator" : "Ninja"
   },
   {
+    "name" : "mingw",
+    "generator" : "MinGW Makefiles"
+  },
+  {
     "name" : "msvs",
     "generator" : "Visual Studio 17 2022"
   },
