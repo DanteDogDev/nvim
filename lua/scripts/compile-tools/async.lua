@@ -22,7 +22,6 @@ local function process(data)
   for match in data:gmatch("([^\n]*\n?)") do
     table.insert(result, match)
   end
-  print(vim.inspect(result))
   return result
 end
 
@@ -56,9 +55,9 @@ local function on_exit(code, signal)
     M.job = nil
     M.opts = nil
     M.stdin = nil
-    M.stdout = nil
-    M.stderr = nil
-    vim.fn.appendbufline(M.buf, "$", "Process Finnished with Exit Code: " .. code .. " (" .. signal .. ")")
+    M.stdout:read_stop()
+    M.stderr:read_stop()
+    vim.fn.appendbufline(M.buf, "$", "Process Finnished with Exit Code: " .. code .. " signal(" .. signal .. ")")
     M.job = nil
     if #M.command_queue > 0 then
       local next_cmd = table.remove(M.command_queue, 1)
@@ -74,7 +73,9 @@ local function on_start()
 end
 
 M.force_stop = function()
-  vim.uv.kill(M.job, "SIGTERM")
+  if M.is_running then
+    M.job:kill(15)
+  end
 end
 
 ---@param cmd string
@@ -114,5 +115,6 @@ M.command = function(cmd, args, dir)
     verbatim = true,
   }, on_exit)
   on_start()
+
 end
 return M

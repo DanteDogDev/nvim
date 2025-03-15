@@ -47,11 +47,16 @@ local function select_kit()
     end
   end)
 end
+local function move_compile_commands()
+  -- local json = require("scripts.compile-tools").json.decode_project()
+  -- if not json then return end
+  -- local dir = "./bin/" .. json.build_type
+  -- require("scripts.compile-tools").terminal.send_command("mv", {"-Force ./compile_commands.json ../../"},dir)
+end
 M.setup = function()
   select_kit()
 end
 M.clean = function()
-  vim.fn.delete("bin", "rf")
 end
 M.reload = function()
   select_build_type()
@@ -87,6 +92,7 @@ M.generate = function()
 
   table.insert(args, '-B "' .. dir .. '"')
   terminal.send_command("cmake", args)
+  move_compile_commands()
 end
 M.build = function()
   local json = require("scripts.compile-tools").json.decode_project()
@@ -95,11 +101,21 @@ M.build = function()
   local terminal = require("scripts.compile-tools").terminal
   terminal.send_command("cmake", {"--build", dir})
 end
-M.run = function()
+M.run = function(retarget)
+  retarget = retarget or false
   local json = require("scripts.compile-tools").json.decode_project()
   if not json then return end
-  if not json.target then
+  if not json.target or retarget then
+    local dir = "./bin/" .. json.build_type
+    local result = vim.fn.system("fd . " .. dir .. " -e exe --exclude CMakeFiles")
+    local targets = vim.fn.split(result, "\n")
+    vim.ui.select(targets, {}, function(target)
+      json.target = target
+      require("scripts.compile-tools").json.encode_project(json)
+      require("scripts.compile-tools").terminal.send_command(json.target)
+    end)
   else
+    require("scripts.compile-tools").terminal.send_command(json.target)
   end
 end
 return M

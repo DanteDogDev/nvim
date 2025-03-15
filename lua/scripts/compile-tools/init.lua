@@ -22,46 +22,9 @@ M.setup = function(opts)
     { "<leader>mR",":lua require('scripts.compile-tools').build_and_run()<CR>", group = "Build And Run", icon = ":3" },
     { "<leader>mt",":lua require('scripts.compile-tools').terminal.toggle_terminal()<CR>", group = "Toggle Terminal", icon = ":3" },
   })
-
-  vim.api.nvim_create_user_command("CompileTools", function(opt)
-    local command = opt.fargs[1]
-    if command == "load_module" then
-      M.load()
-    elseif command == "clean" then
-      M.clean()
-    elseif command == "reload" then
-      M.reload()
-    elseif command == "generate" then
-      M.generate()
-    elseif command == "build" then
-      M.build()
-    elseif command == "run" then
-      M.run()
-    elseif command == "build_and_run" then
-      M.build_and_run()
-    elseif command == "toggle_term" then
-      M.terminal.toggle_terminal()
-    elseif command == "clear_term" then
-      M.terminal.clear_terminal()
-    elseif command == "command" then
-      vim.ui.input({ prompt = "Enter command: " }, function(input)
-        if input and input ~= "" then
-          local cmd, args = input:match("^(%S+)%s*(.*)")
-          M.terminal.send_command(cmd, vim.fn.split(args, "%s+"))
-        else
-          print("No command entered")
-        end
-      end)
-    end
-  end, {
-    nargs = 1,
-    complete = function()
-      return {"load_module", "clean", "reload", "generate", "build", "run","build_and_run" , "command", "toggle_term", "clear_term" }
-    end,
-  })
 end
 M.load = function()
-  if M.module then
+  if M.json.decode_project() and M.module then
     return
   end
   local project = M.json.decode_project()
@@ -75,6 +38,7 @@ M.load = function()
     end
     local json = {}
     vim.ui.select(modules, { prompt = "Select Compiler Module: " }, function(module)
+      if not module then return end
       json.module = module
       require("scripts.compile-tools").json.encode_project(json)
       M.module = require("scripts.compile-tools.compilers." .. module)
@@ -88,7 +52,7 @@ M.clean = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.clean()
-  M.apply_syntax()
+  vim.fn.delete("bin", "rf")
   M.module = nil
 end
 M.reload = function()
