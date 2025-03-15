@@ -78,20 +78,13 @@ M.force_stop = function()
   end
 end
 
----@param cmd string
----@param args string[]?
----@param dir string?
-M.command = function(cmd, args, dir)
+local function process_command(cmd,args,dir)
   args = args or {}
   dir = dir or vim.fn.getcwd()
   if dir:sub(1, 2) == "./" then
     dir = vim.fn.getcwd() .. dir:sub(2)
   end
   vim.fn.mkdir(dir, "p")
-  if M.is_running then
-    table.insert(M.command_queue, { cmd = cmd, args = args, dir = dir })
-    return
-  end
   if M.env[cmd] then
     cmd = M.env[cmd]
   end
@@ -102,6 +95,23 @@ M.command = function(cmd, args, dir)
       end
     end
   end
+  return cmd, args, dir
+end
+
+---@param cmd string
+---@param args string[]?
+---@param dir string?
+M.command = function(cmd, args, dir)
+  if M.is_running then
+    table.insert(M.command_queue, { cmd = cmd, args = args, dir = dir })
+    return
+  end
+  if type(cmd) == "function" then cmd() return end
+  cmd, args, dir = process_command(cmd, args, dir)
+  M.execute(cmd, args, dir)
+end
+
+M.execute = function(cmd,args,dir)
   M.stdin = vim.uv.new_pipe()
   M.stdout = vim.uv.new_pipe()
   M.stderr = vim.uv.new_pipe()
@@ -115,6 +125,5 @@ M.command = function(cmd, args, dir)
     verbatim = true,
   }, on_exit)
   on_start()
-
 end
 return M

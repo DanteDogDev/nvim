@@ -48,10 +48,12 @@ local function select_kit()
   end)
 end
 local function move_compile_commands()
-  -- local json = require("scripts.compile-tools").json.decode_project()
-  -- if not json then return end
-  -- local dir = "./bin/" .. json.build_type
-  -- require("scripts.compile-tools").terminal.send_command("mv", {"-Force ./compile_commands.json ../../"},dir)
+  local json = require("scripts.compile-tools").json.decode_project()
+  if not json then return end
+  local target = "./bin/" .. json.build_type .. "/compile_commands.json"
+  local dest = vim.fn.getcwd() .. "/compile_commands.json"
+  vim.fn.rename(target, dest)
+
 end
 M.setup = function()
   select_kit()
@@ -92,7 +94,7 @@ M.generate = function()
 
   table.insert(args, '-B "' .. dir .. '"')
   terminal.send_command("cmake", args)
-  move_compile_commands()
+  terminal.send_command(move_compile_commands)
 end
 M.build = function()
   local json = require("scripts.compile-tools").json.decode_project()
