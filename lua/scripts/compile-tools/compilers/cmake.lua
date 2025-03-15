@@ -3,6 +3,25 @@ local M = {
     module = "cmake"
   },
 }
+M.syntax = function() -- FIXME: THIS IS SHIT
+   return {
+    { group = "@constructor", pattern =  "[0-9]"},
+    { group = "@comment.error", pattern =  "\\verror:.*",},
+    { group = "@comment.error", pattern =  "error\\w",},
+    { group = "@comment.warning", pattern =  "\\vwarning:.*",},
+    { group = "@comment.warning", pattern =  "warning\\w",},
+    { group = "@comment.note", pattern =  "\\vnote:.*",},
+    { group = "@keyword", pattern =  "\\[.*\\]"},
+    { group = "@constructor", pattern =  "\\[-.*\\]"},
+    { group = "@annotation", pattern =  "\\[\\[.*\\]\\]"},
+    { group = "String", pattern =  '"[^"]*"'},
+    { group = "String", pattern =  "'[^']*'"},
+    { group = "Directory", pattern =  "\\zs[A-Z]:\\(.*\\)(\\d\\+,\\d\\+):"},
+    { group = "@comment", pattern =  "\\zs|.*$"},
+    { group = "none", pattern =  "\\zs\\^\\(.*\\)"},
+    { group = "conceal", pattern =  "\\zsIn file included from \\(.*\\)"},
+  }
+end
 local function select_build_type()
   vim.ui.select({ "debug", "release" }, { prompt = "Select Build Type: " }, function(build_type)
     M.json.build_type = build_type
@@ -43,7 +62,7 @@ M.generate = function()
   local dir = "./bin/" .. json.build_type
   local terminal = require("scripts.compile-tools").terminal
   if json.settings.envSetupScript then
-    terminal.send_command(json.settings.envSetupScript, {}, dir)
+    terminal.send_command("powershell", {"-Command", "& '" .. json.settings.envSetupScript .. "'"}, dir)
   end
   local args = {} ---@type string[]
   if json.settings.generator then
@@ -74,7 +93,13 @@ M.build = function()
   if not json then return end
   local dir = "./bin/" .. json.build_type
   local terminal = require("scripts.compile-tools").terminal
-  terminal.send_command("cmake", {"--build"}, dir)
+  terminal.send_command("cmake", {"--build", dir})
 end
-M.run = function() end
+M.run = function()
+  local json = require("scripts.compile-tools").json.decode_project()
+  if not json then return end
+  if not json.target then
+  else
+  end
+end
 return M

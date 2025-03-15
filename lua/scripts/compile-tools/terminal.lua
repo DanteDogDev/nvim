@@ -2,10 +2,13 @@
 local M = {}
 M.setup = function(opts)
   opts = opts or {}
-  M.job = require("scripts.compile-tools.job")
+  M.job = require("scripts.compile-tools.async")
+  M.match_id = {}
   M.active = false
   M.toggle = false
   M.job.setup()
+  M.buf = 0
+  M.win = 0
 end
 
 M.send_command = function(cmd, args, dir)
@@ -26,10 +29,10 @@ M.open_terminal = function()
   M.win = vim.api.nvim_open_win(M.buf, true, {
     title = "Terminal",
     relative = "editor",
-    width = vim.o.columns - 16,
-    height = vim.o.lines - 16,
-    col = 8,
-    row = 4,
+    width = vim.o.columns - 8,
+    height = vim.o.lines - 8,
+    col = 4,
+    row = 2,
     border = "single",
   })
   vim.api.nvim_buf_set_keymap( M.buf, "n", "q", ":lua require('scripts.compile-tools').terminal.close_terminal()<CR>", { silent = true, noremap = true })
@@ -71,5 +74,6 @@ M.close_terminal = function()
   M.win = nil
   M.active = false
   M.toggle = false
+  M.match_id = {}
 end
 return M

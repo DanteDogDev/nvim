@@ -9,17 +9,36 @@ M.setup = function(opts)
   M.json.setup(opts)
   M.terminal = require("scripts.compile-tools.terminal")
   M.terminal.setup(opts)
-  M.syntax = require("scripts.compile-tools.syntax")
-  M.syntax.setup(opts)
   M.module = nil
 
-  vim.api.nvim_create_user_command("CompileTools", function(opts)
-    local command = opts.fargs[1]
-    if command == "clean" then
+  require("which-key").add({
+    { "<leader>m", group = "Compiler Tools", icon = ":3" },
+    { "<leader>mm",":lua require('scripts.compile-tools').load()<CR>", group = "Load Module", icon = ":3" },
+    { "<leader>mg",":lua require('scripts.compile-tools').generate()<CR>", group = "Generate", icon = ":3" },
+    { "<leader>mb",":lua require('scripts.compile-tools').build()<CR>", group = "Build", icon = ":3" },
+    { "<leader>ml",":lua require('scripts.compile-tools').reload()<CR>", group = "Reload", icon = ":3" },
+    { "<leader>mc",":lua require('scripts.compile-tools').clean()<CR>", group = "Clean", icon = ":3" },
+    { "<leader>mr",":lua require('scripts.compile-tools').run()<CR>", group = "Run", icon = ":3" },
+    { "<leader>mR",":lua require('scripts.compile-tools').build_and_run()<CR>", group = "Build And Run", icon = ":3" },
+    { "<leader>mt",":lua require('scripts.compile-tools').terminal.toggle_terminal()<CR>", group = "Toggle Terminal", icon = ":3" },
+  })
+
+  vim.api.nvim_create_user_command("CompileTools", function(opt)
+    local command = opt.fargs[1]
+    if command == "load_module" then
+      M.load()
+    elseif command == "clean" then
+      M.clean()
     elseif command == "reload" then
+      M.reload()
     elseif command == "generate" then
+      M.generate()
     elseif command == "build" then
+      M.build()
     elseif command == "run" then
+      M.run()
+    elseif command == "build_and_run" then
+      M.build_and_run()
     elseif command == "toggle_term" then
       M.terminal.toggle_terminal()
     elseif command == "clear_term" then
@@ -37,7 +56,7 @@ M.setup = function(opts)
   end, {
     nargs = 1,
     complete = function()
-      return { "clean", "reload", "generate", "build", "run", "command", "toggle_term", "clear_term" }
+      return {"load_module", "clean", "reload", "generate", "build", "run","build_and_run" , "command", "toggle_term", "clear_term" }
     end,
   })
 end
@@ -66,30 +85,56 @@ M.load = function()
   end
 end
 M.clean = function()
-  if not M.json.decode_project() then return end
+  if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
-  M.module = nil
   M.module.clean()
+  M.apply_syntax()
+  M.module = nil
 end
 M.reload = function()
-  if not M.json.decode_project() then return end
+  if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.reload()
+  M.apply_syntax()
 end
 M.generate = function()
-  if not M.json.decode_project() then return end
+  if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.generate()
+  M.apply_syntax()
 end
 
 M.build = function()
-  if not M.json.decode_project() then return end
+  if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.build()
+  M.apply_syntax()
 end
 M.run = function()
-  if not M.json.decode_project() then return end
+  if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.run()
+  M.apply_syntax()
+end
+
+M.build_and_run = function()
+  if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
+  if not M.module then M.load() end
+  M.module.build()
+  M.module.run()
+  M.apply_syntax()
+end
+M.apply_syntax = function()
+  if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
+  if not M.module then M.load() end
+  if not M.terminal.active then return end
+  for _, id in ipairs(M.terminal.match_id) do
+    vim.fn.matchdelete(id)
+  end
+  local matches = M.module.syntax()
+  for _, match in ipairs(matches) do
+    local id = vim.fn.matchadd(match.group, match.pattern, 100, -1, {window = M.terminal.win})
+    table.insert(M.terminal.match_id, id)
+  end
 end
 return M
