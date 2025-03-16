@@ -30,7 +30,7 @@ M.load = function()
   local project = M.json.decode_project()
   if not project then
     local dir = vim.fn.stdpath("config") .. "/lua/scripts/compile-tools/compilers"
-    local files = vim.fn.globpath(dir, "*", false, true)
+    local files = vim.fn.globpath(dir, "*.lua", false, true)
     local modules = {}
     for _, file in ipairs(files) do
       local filename = vim.fn.fnamemodify(file, ":t"):match("^(.-)%.") or vim.fn.fnamemodify(file, ":t")

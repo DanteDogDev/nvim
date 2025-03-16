@@ -1,31 +1,11 @@
-local M = {
-  json = {
-    module = "cmake"
-  },
-}
-M.syntax = function() -- FIXME: THIS IS SHIT
-   return {
-    { group = "@constructor", pattern =  "[0-9]"},
-    { group = "@comment.error", pattern =  "\\verror:.*",},
-    { group = "@comment.error", pattern =  "error\\w",},
-    { group = "@comment.warning", pattern =  "\\vwarning:.*",},
-    { group = "@comment.warning", pattern =  "warning\\w",},
-    { group = "@comment.note", pattern =  "\\vnote:.*",},
-    { group = "@keyword", pattern =  "\\[.*\\]"},
-    { group = "@constructor", pattern =  "\\[-.*\\]"},
-    { group = "@annotation", pattern =  "\\[\\[.*\\]\\]"},
-    { group = "String", pattern =  '"[^"]*"'},
-    { group = "String", pattern =  "'[^']*'"},
-    { group = "Directory", pattern =  "\\zs[A-Z]:\\(.*\\)(\\d\\+,\\d\\+):"},
-    { group = "@comment", pattern =  "\\zs|.*$"},
-    { group = "none", pattern =  "\\zs\\^\\(.*\\)"},
-    { group = "conceal", pattern =  "\\zsIn file included from \\(.*\\)"},
-  }
-end
+local M = {}
 local function select_build_type()
+  local json = require("scripts.compile-tools").json.decode_project()
+  if not json then return end
   vim.ui.select({ "debug", "release" }, { prompt = "Select Build Type: " }, function(build_type)
-    M.json.build_type = build_type
-    require("scripts.compile-tools").json.encode_project(M.json)
+    if not build_type then print("WTF CHOOSE A GOD DAM BUILD TYPE") end
+    json.build_type = build_type
+    require("scripts.compile-tools").json.encode_project(json)
   end)
 end
 local function select_kit()
@@ -33,6 +13,8 @@ local function select_kit()
   if type(cmake) ~= "table" then
     return
   end
+  local json = require("scripts.compile-tools").json.decode_project()
+  if not json then return end
   local names = {}
   for _, item in ipairs(cmake) do
     table.insert(names, item.name)
@@ -40,7 +22,8 @@ local function select_kit()
   vim.ui.select(names, { prompt = "Select CMake kit: " }, function(kit)
     for _, item in ipairs(cmake) do
       if item.name == kit then
-        M.json.settings = item
+        json.settings = item
+        require("scripts.compile-tools").json.encode_project(json)
         select_build_type()
         return
       end
@@ -53,15 +36,16 @@ local function move_compile_commands()
   local target = "./bin/" .. json.build_type .. "/compile_commands.json"
   local dest = vim.fn.getcwd() .. "/compile_commands.json"
   vim.fn.rename(target, dest)
-
 end
+
 M.setup = function()
   select_kit()
 end
-M.clean = function()
-end
 M.reload = function()
   select_build_type()
+end
+M.clean = function()
+  print("CLEANED")
 end
 M.generate = function()
   local json = require("scripts.compile-tools").json.decode_project()
@@ -120,5 +104,24 @@ M.run = function(retarget)
   else
     require("scripts.compile-tools").terminal.send_command(json.target)
   end
+end
+M.syntax = function() -- FIXME: THIS IS SHIT
+   return {
+    { group = "@constructor", pattern =  "[0-9]"},
+    { group = "@comment.error", pattern =  "\\verror:.*",},
+    { group = "@comment.error", pattern =  "error\\w",},
+    { group = "@comment.warning", pattern =  "\\vwarning:.*",},
+    { group = "@comment.warning", pattern =  "warning\\w",},
+    { group = "@comment.note", pattern =  "\\vnote:.*",},
+    { group = "@keyword", pattern =  "\\[.*\\]"},
+    { group = "@constructor", pattern =  "\\[-.*\\]"},
+    { group = "@annotation", pattern =  "\\[\\[.*\\]\\]"},
+    { group = "String", pattern =  '"[^"]*"'},
+    { group = "String", pattern =  "'[^']*'"},
+    { group = "Directory", pattern =  "\\zs[A-Z]:\\(.*\\)(\\d\\+,\\d\\+):"},
+    { group = "@comment", pattern =  "\\zs|.*$"},
+    { group = "none", pattern =  "\\zs\\^\\(.*\\)"},
+    { group = "conceal", pattern =  "\\zsIn file included from \\(.*\\)"},
+  }
 end
 return M

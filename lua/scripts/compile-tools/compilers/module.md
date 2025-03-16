@@ -1,3 +1,6 @@
+# Compiler Module's
+
+```lua
 local M = {}
 M.setup = function()
 end
@@ -18,3 +21,4 @@ M.syntax = function()
   }
 end
 return M
+```
