@@ -20,7 +20,9 @@ local function process(data)
   if not data then return {} end
   local result = {}
   for match in data:gmatch("([^\n]*\n?)") do
-    table.insert(result, match)
+    if match ~= "" then
+      table.insert(result, match)
+    end
   end
   return result
 end

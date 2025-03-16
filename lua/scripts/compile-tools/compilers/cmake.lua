@@ -112,6 +112,7 @@ M.run = function(retarget)
     local result = vim.fn.system("fd . " .. dir .. " -e exe --exclude CMakeFiles")
     local targets = vim.fn.split(result, "\n")
     vim.ui.select(targets, {}, function(target)
+      if not target then return end
       json.target = target
       require("scripts.compile-tools").json.encode_project(json)
       require("scripts.compile-tools").terminal.send_command(json.target)
