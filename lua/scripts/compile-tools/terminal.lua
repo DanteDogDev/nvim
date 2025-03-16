@@ -34,6 +34,7 @@ M.open_terminal = function()
     col = 4,
     row = 2,
     border = "single",
+    zindex = 25
   })
   vim.api.nvim_buf_set_keymap( M.buf, "n", "q", ":lua require('scripts.compile-tools').terminal.close_terminal()<CR>", { silent = true, noremap = true })
   vim.api.nvim_buf_set_keymap( M.buf, "n", "<C-c>", ":lua require('scripts.compile-tools').terminal.job.force_stop()<CR>", { silent = true, noremap = true })

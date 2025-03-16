@@ -107,21 +107,21 @@ M.run = function(retarget)
 end
 M.syntax = function() -- FIXME: THIS IS SHIT
    return {
-    { group = "@constructor", pattern =  "[0-9]"},
-    { group = "@comment.error", pattern =  "\\verror:.*",},
-    { group = "@comment.error", pattern =  "error\\w",},
-    { group = "@comment.warning", pattern =  "\\vwarning:.*",},
-    { group = "@comment.warning", pattern =  "warning\\w",},
-    { group = "@comment.note", pattern =  "\\vnote:.*",},
-    { group = "@keyword", pattern =  "\\[.*\\]"},
-    { group = "@constructor", pattern =  "\\[-.*\\]"},
-    { group = "@annotation", pattern =  "\\[\\[.*\\]\\]"},
-    { group = "String", pattern =  '"[^"]*"'},
-    { group = "String", pattern =  "'[^']*'"},
-    { group = "Directory", pattern =  "\\zs[A-Z]:\\(.*\\)(\\d\\+,\\d\\+):"},
-    { group = "@comment", pattern =  "\\zs|.*$"},
-    { group = "none", pattern =  "\\zs\\^\\(.*\\)"},
-    { group = "conceal", pattern =  "\\zsIn file included from \\(.*\\)"},
+    { group = "@constructor", pattern =  "[0-9]" },
+    { group = "@comment.error", pattern =  "\\verror:.*", },
+    { group = "@comment.error", pattern =  "error\\w", },
+    { group = "@comment.warning", pattern =  "\\vwarning:.*", },
+    { group = "@comment.warning", pattern =  "warning\\w", },
+    { group = "@comment.note", pattern =  "\\vnote:.*", },
+    { group = "@keyword", pattern =  "\\[.*\\]" },
+    { group = "@constructor", pattern =  "\\[-.*\\]" },
+    { group = "@annotation", pattern =  "\\[\\[.*\\]\\]" },
+    { group = "String", pattern =  '"[^"]*"' },
+    { group = "String", pattern =  "'[^']*'" },
+    { group = "Directory", pattern =  "\\zs[A-Z]:\\(.*\\)(\\d\\+,\\d\\+):" },
+    { group = "@comment", pattern =  "\\zs|.*$" },
+    { group = "none", pattern =  "\\zs\\^\\(.*\\)" },
+    { group = "conceal", pattern =  "\\zsIn file included from \\(.*\\)" },
   }
 end
 return M
