@@ -99,10 +99,10 @@ M.run = function(retarget)
       if not target then return end
       json.target = target
       require("scripts.compile-tools").json.encode_project(json)
-      require("scripts.compile-tools").terminal.send_command(json.target)
+      require("scripts.compile-tools").terminal.send_command("powershell",{"& '"..json.target.."'"})
     end)
   else
-    require("scripts.compile-tools").terminal.send_command(json.target)
+    require("scripts.compile-tools").terminal.send_command("powershell",{"& '"..json.target.."'"})
   end
 end
 M.syntax = function() -- FIXME: THIS IS SHIT
