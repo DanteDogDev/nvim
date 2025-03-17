@@ -62,8 +62,8 @@ local function on_exit(code, signal)
     vim.fn.appendbufline(M.buf, "$", "Process Finnished with Exit Code: " .. code .. " signal(" .. signal .. ")")
     M.job = nil
     if #M.command_queue > 0 then
-      local next_cmd = table.remove(M.command_queue, 1)
-      M.command(next_cmd.cmd, next_cmd.args, next_cmd.dir)
+      local next_opts = table.remove(M.command_queue, 1)
+      M.queue_cmd(next_opts)
     end
   end)
 end
@@ -80,47 +80,39 @@ M.force_stop = function()
   end
 end
 
-local function process_command(cmd,args,dir)
-  args = args or {}
-  dir = dir or vim.fn.getcwd()
-  if dir:sub(1, 2) == "./" then
-    dir = vim.fn.getcwd() .. dir:sub(2)
+-- FIXME: -------------------------------------------------------------------------------------------------------------
+
+local function process_opts(opts)
+  opts.args = opts.args or {}
+  opts.dir = opts.dir or vim.fn.getcwd()
+  if opts.dir:sub(1, 2) == "./" then
+    opts.dir = vim.fn.getcwd() .. opts.dir:sub(2)
   end
-  vim.fn.mkdir(dir, "p")
-  if M.env[cmd] then
-    cmd = M.env[cmd]
+  vim.fn.mkdir(opts.dir, "p")
+  if M.env[opts.cmd] then
+    opts.cmd = M.env[opts.cmd]
   end
-  for i, arg in ipairs(args) do
+  for i, arg in ipairs(opts.args) do
     for key, value in pairs(M.env) do
       if string.find(arg, key) then
-        args[i] = string.gsub(arg, key, value)
+        opts.args[i] = string.gsub(arg, key, value)
       end
     end
   end
-  return cmd, args, dir
+  return opts
 end
+M.queue_cmd = function(opts)
+  if M.is_running then table.insert(M.command_queue, opts) return end
+  if opts.func then opts.func() return end
+  opts = process_opts(opts)
 
----@param cmd string
----@param args string[]?
----@param dir string?
-M.command = function(cmd, args, dir)
-  if M.is_running then
-    table.insert(M.command_queue, { cmd = cmd, args = args, dir = dir })
-    return
-  end
-  if type(cmd) == "function" then cmd() return end
-  cmd, args, dir = process_command(cmd, args, dir)
-  M.execute(cmd, args, dir)
-end
-
-M.execute = function(cmd,args,dir)
   M.stdin = vim.uv.new_pipe()
   M.stdout = vim.uv.new_pipe()
   M.stderr = vim.uv.new_pipe()
-  vim.fn.appendbufline(M.buf, "$", dir .. ">" .. cmd .. " " .. table.concat(args," "))
-  M.job = vim.uv.spawn(cmd, {
-    cwd = dir,
-    args = args,
+  vim.fn.appendbufline(M.buf, "$", opts.dir .. ">" .. opts.cmd .. " " .. table.concat(opts.args," "))
+  M.job = vim.uv.spawn(opts.cmd, {
+    cwd = opts.dir,
+    args = opts.args,
     stdio = { M.stdin, M.stdout, M.stderr },
     hide = true,
     detached = false,

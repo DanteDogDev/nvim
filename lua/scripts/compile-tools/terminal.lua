@@ -11,11 +11,11 @@ M.setup = function(opts)
   M.win = 0
 end
 
-M.send_command = function(cmd, args, dir)
+M.send_command = function(opts)
   if not M.active then M.open_terminal() end
   if not M.toggle then M.toggle_terminal() end
   M.job.buf = M.buf
-  M.job.command(cmd, args, dir)
+  M.job.queue_cmd(opts)
 end
 
 M.open_terminal = function()
