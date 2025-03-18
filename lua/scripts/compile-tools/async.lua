@@ -33,11 +33,16 @@ local function on_stdout(err, data)
   vim.schedule(function()
     data = process(data)
     for _, line in ipairs(data) do
-      line = string.gsub(line,"\n","") -- FIXME: TEMP GET RID OF LATER WHEN I GET THE FUCKING BUG
+      local new_line = string.find(line, '\n')
       line = string.gsub(line,"\r","")
-      if line then vim.fn.appendbufline(M.buf, "$", line)end
+      line = string.gsub(line,"\n","")
+      if not line then return end
+      local eof = vim.api.nvim_buf_line_count(0)
+      local prev = vim.api.nvim_buf_get_lines(M.buf, eof-1, eof, false)[1]
+      vim.api.nvim_buf_set_lines(M.buf, eof-1,eof,false,{prev .. line})
+      if new_line then vim.fn.appendbufline(M.buf, "$", {""}) end
+      if compile_tools.terminal.toggle then vim.cmd("normal! G") end
     end
-    if compile_tools.terminal.toggle then vim.cmd("normal! G") end
   end)
 end
 
@@ -46,9 +51,14 @@ local function on_stderr(err, data)
   vim.schedule(function()
     data = process(data)
     for _, line in ipairs(data) do
-      line = string.gsub(line,"\n","") -- FIXME: TEMP GET RID OF LATER WHEN I GET THE FUCKING BUG
+      local new_line = string.find(line, '\n')
       line = string.gsub(line,"\r","")
-      if line then vim.fn.appendbufline(M.buf, "$", line)end
+      line = string.gsub(line,"\n","")
+      if not line then return end
+      local eof = vim.api.nvim_buf_line_count(0)
+      local prev = vim.api.nvim_buf_get_lines(M.buf, eof-1, eof, false)[1]
+      vim.api.nvim_buf_set_lines(M.buf, eof-1,eof,false,{prev .. line})
+      if new_line then vim.fn.appendbufline(M.buf, "$", {""}) end
       if compile_tools.terminal.toggle then vim.cmd("normal! G") end
     end
   end)
@@ -112,6 +122,7 @@ M.queue_cmd = function(opts)
   M.stdout = vim.uv.new_pipe()
   M.stderr = vim.uv.new_pipe()
   vim.fn.appendbufline(M.buf, "$", opts.dir .. ">" .. opts.cmd .. " " .. table.concat(opts.args," "))
+  vim.fn.appendbufline(M.buf, "$", {""})
   M.job = vim.uv.spawn(opts.cmd, {
     cwd = opts.dir,
     args = opts.args,
