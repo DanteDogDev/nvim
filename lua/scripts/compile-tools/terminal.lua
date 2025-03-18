@@ -24,6 +24,7 @@ M.open_terminal = function()
     print("Terminal Already Initialized")
     return
   end
+  M.last_win = vim.api.nvim_get_current_win()
   M.active = true
   M.toggle = true
   M.buf = vim.api.nvim_create_buf(false, true)
@@ -49,10 +50,14 @@ M.toggle_terminal = function()
   end
   if M.toggle then
     vim.api.nvim_win_set_config(M.win, {hide = true})
+    vim.api.nvim_set_current_win(M.last_win)
     M.toggle = false
   else
+    M.last_win = vim.api.nvim_get_current_win()
     vim.api.nvim_win_set_config(M.win, {hide = false})
+    vim.api.nvim_set_current_win(M.win)
     M.toggle = true
+    vim.cmd("normal! G")
   end
 end
 
@@ -73,6 +78,7 @@ M.close_terminal = function()
   if M.buf ~= nil then
     vim.api.nvim_buf_delete(M.buf, { force = true, unload = true })
   end
+  vim.api.nvim_set_current_win(M.last_win)
   M.buf = nil
   M.win = nil
   M.active = false

@@ -1,3 +1,4 @@
+local compile_tools = require("scripts.compile-tools")
 ---@diagnostic disable: missing-fields, param-type-mismatch
 local M = {
   command_queue = {},
@@ -36,6 +37,7 @@ local function on_stdout(err, data)
       line = string.gsub(line,"\r","")
       if line then vim.fn.appendbufline(M.buf, "$", line)end
     end
+    if compile_tools.terminal.toggle then vim.cmd("normal! G") end
   end)
 end
 
@@ -47,6 +49,7 @@ local function on_stderr(err, data)
       line = string.gsub(line,"\n","") -- FIXME: TEMP GET RID OF LATER WHEN I GET THE FUCKING BUG
       line = string.gsub(line,"\r","")
       if line then vim.fn.appendbufline(M.buf, "$", line)end
+      if compile_tools.terminal.toggle then vim.cmd("normal! G") end
     end
   end)
 end
