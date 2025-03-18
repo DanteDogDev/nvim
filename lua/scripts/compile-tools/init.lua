@@ -23,6 +23,7 @@ M.setup = function(opts)
     { "<leader>mt",":lua require('scripts.compile-tools').terminal.toggle_terminal()<CR>", group = "Toggle Terminal", icon = ":3" },
   })
 end
+
 M.load = function()
   if M.json.decode_project() and M.module then
     return
@@ -48,6 +49,7 @@ M.load = function()
     M.module = require("scripts.compile-tools.compilers." .. project.module)
   end
 end
+
 M.clean = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
@@ -55,11 +57,13 @@ M.clean = function()
   vim.fn.delete("bin", "rf")
   M.module = nil
 end
+
 M.reload = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.reload()
 end
+
 M.generate = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
@@ -71,6 +75,7 @@ M.build = function()
   if not M.module then M.load() end
   M.module.build()
 end
+
 M.run = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
@@ -85,6 +90,7 @@ M.build_and_run = function()
     func = function() M.module.run() end
   })
 end
+
 M.apply_syntax = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end

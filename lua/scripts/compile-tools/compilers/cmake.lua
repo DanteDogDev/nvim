@@ -37,7 +37,15 @@ local function move_compile_commands()
   if not project then return end
   local target = "./bin/" .. project.build_type .. "/compile_commands.json"
   local dest = vim.fn.getcwd() .. "/compile_commands.json"
-  vim.fn.rename(target, dest)
+  if vim.fn.filereadable("compile_commands.json") == 1 then
+    print("Deleted")
+    vim.fn.delete("compile_commands.json", "rf")
+  end
+  if vim.fn.filereadable(target) == 1 then
+    print("Moved")
+    vim.fn.rename(target, dest)
+  end
+  if not project then return end
 end
 
 M.setup = function()
@@ -86,7 +94,9 @@ M.generate = function()
     cmd = "cmake",
     args = args
   })
-  terminal.send_command(move_compile_commands)
+  terminal.send_command({
+    func = move_compile_commands
+  })
 end
 M.build = function()
   local project = json.decode_project()
