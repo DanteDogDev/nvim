@@ -18,12 +18,13 @@ git clone https://github.com/DanteDogDev/nvim.git ~/.config/nvim
 
 ## Install Dependencies
 
-- Neovim 
+- Neovim
 - Nerd Font
 - lua
 - lua rocks
 - git
 - lazygit
+- curl
 - ripgrep
 - fd
 - fzf
@@ -68,6 +69,7 @@ fnm install 22 # might have to add this to enviroment variables
 ```
 
 Linux
+
 ```bash
 I DONT FUCKING KNOW
 ```
