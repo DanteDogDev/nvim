@@ -74,7 +74,7 @@ end
 M.run = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
-  M.module.run()
+  M.module.run(true)
 end
 
 M.build_and_run = function()
@@ -82,7 +82,7 @@ M.build_and_run = function()
   if not M.module then M.load() end
   M.module.build()
   M.terminal.send_command( {
-    func = function() M.module.run(true) end
+    func = function() M.module.run() end
   })
 end
 M.apply_syntax = function()
