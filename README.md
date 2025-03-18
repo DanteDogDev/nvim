@@ -1,7 +1,7 @@
 # Toastvim
 
-
 Welcome to **Toastvim** – Where your code gets *Toast*, just like *Toast*!!!!!!
+
 ## Features
 
 - **Template**: File Template support with support for extra ${} with lua
@@ -17,60 +17,4 @@ Welcome to **Toastvim** – Where your code gets *Toast*, just like *Toast*!!!!!
   
 ## Installation
 
-### Commands
-```bash
-Remove-Item $env:LOCALAPPDATA\nvim -Recurse -Force
-Remove-Item $env:LOCALAPPDATA\nvim-data -Recurse -Force
-git clone https://github.com/DanteDogDev/nvim.git $env:LOCALAPPDATA\nvim
-```
-
-### Prerequisites
-
-- git
-- pwsh
-- Neovim
-- Nerd Font 
-- lua
-- luarocks
-- lazygit
-- git
-- mingw
-- ripgrep
-- fd
-- fzf
-- rust
-#### C/C++
-- llvm
-- cmake
-- ninja
-- dotnet sdk
-#### Json
-- nodejs
-
-> Experimental Installation
-```bash
-winget install chocolatey
-winget install pwsh
-choco install git
-choco install neovim
-choco install lua51
-choco install luarocks
-choco install lazygit
-choco install ripgrep
-choco install fd
-choco install fzf
-choco install rust
-# C/C++
-choco install llvm
-choco install cmake
-choco install ninja
-winget install Microsoft.DotNet.SDK.9
-# Json
-winget install Schniz.fnm
-fnm install 22 # might have to add this to enviroment variables
-```
-> snacks.image not working yet ignore
-```bash
-winget install ImageMagick.ImageMagick
-choco install tectonic
-```
+[INSTALLATION](./INSTALLATION.md)
