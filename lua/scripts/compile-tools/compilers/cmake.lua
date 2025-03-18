@@ -116,7 +116,7 @@ M.run = function(retarget)
   if not project then return end
   if not project.target or retarget then
     local dir = "./bin/" .. project.build_type
-    local result = vim.fn.system("fd . " .. dir .. " -e exe --exclude CMakeFiles")
+    local result = vim.fn.system("fd . "..dir.." --type x -E CMakeFiles")
     local targets = vim.fn.split(result, "\n")
     vim.ui.select(targets, {}, function(target)
       if not target then return end

@@ -63,9 +63,8 @@ choco install cmake
 choco install ninja
 winget install Microsoft.DotNet.SDK.9
 # Json
-winget install Schniz.fnm
-# Restart Terminal
-fnm install 22 # might have to add this to enviroment variables
+winget install Schniz.fnm # restart terminal after this
+fnm install 22
 ```
 
 Linux
