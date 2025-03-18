@@ -1,6 +1,7 @@
 local terminal = require("scripts.compile-tools").terminal
 local json = require("scripts.compile-tools").json
 local M = {}
+
 local function select_build_type()
   local project = json.decode_project()
   if not project then return end
@@ -10,6 +11,7 @@ local function select_build_type()
     json.encode_project(project)
   end)
 end
+
 local function select_kit()
   local cmake = json.decode_module("cmake")
   if type(cmake) ~= "table" then
@@ -32,6 +34,7 @@ local function select_kit()
     end
   end)
 end
+
 local function move_compile_commands()
   local project = json.decode_project()
   if not project then return end

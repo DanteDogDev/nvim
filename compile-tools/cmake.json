@@ -1,15 +1,19 @@
 [
   {
-    "name" : "ninja",
-    "generator" : "Ninja"
+    "name" : "ninja-gnu",
+    "generator" : "Ninja",
+    "compilers" : {
+      "C" : "gcc.exe",
+      "CXX" : "g++.exe"
+    }
   },
   {
-    "name" : "mingw",
-    "generator" : "MinGW Makefiles"
-  },
-  {
-    "name" : "msvs",
-    "generator" : "Visual Studio 17 2022"
+    "name" : "ninja-clang",
+    "generator" : "Ninja",
+    "compilers" : {
+      "C" : "clang.exe",
+      "CXX" : "clang.exe"
+    }
   },
   {
     "name" : "ninja-msvs",
@@ -19,5 +23,13 @@
       "CXX" : "clang-cl.exe"
     },
     "envSetupScript" : "VCVARS64"
+  },
+  {
+    "name" : "mingw",
+    "generator" : "MinGW Makefiles"
+  },
+  {
+    "name" : "msvs",
+    "generator" : "Visual Studio 17 2022"
   }
 ]
