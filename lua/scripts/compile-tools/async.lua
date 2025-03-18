@@ -80,8 +80,6 @@ M.force_stop = function()
   end
 end
 
--- FIXME: -------------------------------------------------------------------------------------------------------------
-
 local function process_opts(opts)
   opts.args = opts.args or {}
   opts.dir = opts.dir or vim.fn.getcwd()
@@ -101,6 +99,7 @@ local function process_opts(opts)
   end
   return opts
 end
+
 M.queue_cmd = function(opts)
   if M.is_running then table.insert(M.command_queue, opts) return end
   if opts.func then opts.func() return end

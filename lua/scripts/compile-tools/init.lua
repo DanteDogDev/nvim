@@ -59,26 +59,22 @@ M.reload = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.reload()
-  M.apply_syntax()
 end
 M.generate = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.generate()
-  M.apply_syntax()
 end
 
 M.build = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.build()
-  M.apply_syntax()
 end
 M.run = function()
   if not M.json.decode_project() then print("PROJECT NOT FOUND") return end
   if not M.module then M.load() end
   M.module.run()
-  M.apply_syntax()
 end
 
 M.build_and_run = function()

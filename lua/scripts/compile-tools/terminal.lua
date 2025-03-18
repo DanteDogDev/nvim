@@ -1,3 +1,4 @@
+local compile_tools = require("scripts.compile-tools")
 ---@diagnostic disable: param-type-mismatch, unused-local
 local M = {}
 M.setup = function(opts)
@@ -38,6 +39,7 @@ M.open_terminal = function()
   })
   vim.api.nvim_buf_set_keymap( M.buf, "n", "q", ":lua require('scripts.compile-tools').terminal.close_terminal()<CR>", { silent = true, noremap = true })
   vim.api.nvim_buf_set_keymap( M.buf, "n", "<C-c>", ":lua require('scripts.compile-tools').terminal.job.force_stop()<CR>", { silent = true, noremap = true })
+  compile_tools.apply_syntax()
 end
 
 M.toggle_terminal = function()

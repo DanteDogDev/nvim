@@ -43,6 +43,7 @@ git clone https://github.com/DanteDogDev/nvim.git $env:LOCALAPPDATA\nvim
 - llvm
 - cmake
 - ninja
+- dotnet sdk
 #### Json
 - nodejs
 
@@ -63,6 +64,7 @@ choco install rust
 choco install llvm
 choco install cmake
 choco install ninja
+winget install Microsoft.DotNet.SDK.9
 # Json
 winget install Schniz.fnm
 fnm install 22 # might have to add this to enviroment variables
