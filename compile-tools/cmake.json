@@ -3,24 +3,24 @@
     "name" : "ninja-gnu",
     "generator" : "Ninja",
     "compilers" : {
-      "C" : "gcc.exe",
-      "CXX" : "g++.exe"
+      "C" : "gcc",
+      "CXX" : "g++"
     }
   },
   {
     "name" : "ninja-clang",
     "generator" : "Ninja",
     "compilers" : {
-      "C" : "clang.exe",
-      "CXX" : "clang.exe"
+      "C" : "clang",
+      "CXX" : "clang"
     }
   },
   {
     "name" : "ninja-msvs",
     "generator" : "Ninja",
     "compilers" : {
-      "C" : "clang-cl.exe",
-      "CXX" : "clang-cl.exe"
+      "C" : "clang-cl",
+      "CXX" : "clang-cl"
     },
     "envSetupScript" : "VCVARS64"
   },

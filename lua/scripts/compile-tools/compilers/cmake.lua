@@ -41,11 +41,9 @@ local function move_compile_commands()
   local target = "./bin/" .. project.build_type .. "/compile_commands.json"
   local dest = vim.fn.getcwd() .. "/compile_commands.json"
   if vim.fn.filereadable("compile_commands.json") == 1 then
-    print("Deleted")
     vim.fn.delete("compile_commands.json", "rf")
   end
   if vim.fn.filereadable(target) == 1 then
-    print("Moved")
     vim.fn.rename(target, dest)
   end
   if not project then return end
