@@ -73,7 +73,7 @@ M.generate = function()
   end
   local args = {} ---@type string[]
   if project.settings.generator then
-    table.insert(args, '-G"' .. project.settings.generator .. '"')
+    table.insert(args, '-G "' .. project.settings.generator .. '"')
   end
   if project.build_type == "debug" then
     table.insert(args, "-DCMAKE_BUILD_TYPE=Debug")
