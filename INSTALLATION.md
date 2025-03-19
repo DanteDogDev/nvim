@@ -82,4 +82,8 @@ sudo pacman -Sy npm
 sudo pacman -Sy imagemagick
 sudo pacman -Sy tectonic
 
+# C/C++
+sudo pacman -Sy cmake
+sudo pacman -Sy ninja
+
 ```
