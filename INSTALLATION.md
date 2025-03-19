@@ -67,7 +67,7 @@ winget install Schniz.fnm # restart terminal after this
 fnm install 22
 ```
 
-Linux
+Arch Linux
 
 ```bash
 sudo pacman -Sy neovim
@@ -79,5 +79,7 @@ sudo pacman -Sy fd
 sudo pacman -Sy ripgrep
 sudo pacman -Sy fzf
 sudo pacman -Sy npm
+sudo pacman -Sy imagemagick
+sudo pacman -Sy tectonic
 
 ```
