@@ -70,5 +70,14 @@ fnm install 22
 Linux
 
 ```bash
-I DONT FUCKING KNOW
+sudo pacman -Sy neovim
+sudo pacman -Sy lua
+sudo pacman -Sy luarocks
+sudo pacman -Sy python-pynvim
+sudo pacman -Sy lazygit
+sudo pacman -Sy fd
+sudo pacman -Sy ripgrep
+sudo pacman -Sy fzf
+sudo pacman -Sy npm
+
 ```
