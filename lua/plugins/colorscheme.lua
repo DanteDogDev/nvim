@@ -1,9 +1,9 @@
 return {
-  { "folke/tokyonight.nvim", },
+  { "AlexvZyl/nordic.nvim", lazy = false, priority = 1000, },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "tokyonight",
+      colorscheme = "nordic",
     },
   },
 }
