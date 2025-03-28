@@ -9,3 +9,8 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 vim.o.foldmethod = "marker"
 vim.o.foldmarker = "#pragma region,#pragma endregion"
+-- vim.diagnostic.config({ virtual_text = { current_line = true } })
+vim.diagnostic.config({
+  virtual_text = false,
+  virtual_lines = {current_line = true},
+})
